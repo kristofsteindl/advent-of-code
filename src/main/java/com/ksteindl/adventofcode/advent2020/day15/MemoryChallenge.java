@@ -9,10 +9,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MemoryChallange extends Puzzle2020 {
+public class MemoryChallenge extends Puzzle2020 {
 
     // TODO - introduce the multiple test cases, not just the first one
-    private static final Logger logger = LogManager.getLogger(MemoryChallange.class);
+    private static final Logger logger = LogManager.getLogger(MemoryChallenge.class);
 
     private static final int DAY = 15;
 
@@ -22,7 +22,7 @@ public class MemoryChallange extends Puzzle2020 {
 
     private final String fileName;
 
-    public MemoryChallange(boolean isTest) {
+    public MemoryChallenge(boolean isTest) {
         super(isTest);
         this.fileName = isTest ? INPUT_TEST_FILE : INPUT_FILE;
     }

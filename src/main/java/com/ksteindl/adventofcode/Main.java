@@ -14,7 +14,7 @@ import com.ksteindl.adventofcode.advent2020.day11.SeatPredictor;
 import com.ksteindl.adventofcode.advent2020.day12.NavigationHelper;
 import com.ksteindl.adventofcode.advent2020.day13.ScheduleOptimizer;
 import com.ksteindl.adventofcode.advent2020.day14.DockingDataDecoder;
-import com.ksteindl.adventofcode.advent2020.day15.MemoryChallange;
+import com.ksteindl.adventofcode.advent2020.day15.MemoryChallenge;
 import com.ksteindl.adventofcode.advent2020.day16.TicketTranslator;
 import com.ksteindl.adventofcode.advent2020.day17.CubeInitiator;
 import com.ksteindl.adventofcode.advent2020.day18.OperationEvaluator;
@@ -47,7 +47,7 @@ public class Main {
             isTest = args[0].equals(TEST_KEYWORD);
         }
         initPuzzles(isTest);
-        //printSolutions(5);
+        //printSolutions(13);
         printAllSolutions();
     }
 
@@ -65,7 +65,7 @@ public class Main {
         puzzles2020.add(new SeatPredictor(isTest));
         puzzles2020.add(new NavigationHelper(isTest));
         puzzles2020.add(new ScheduleOptimizer(isTest));
-        puzzles2020.add(new MemoryChallange(isTest));
+        puzzles2020.add(new MemoryChallenge(isTest));
         puzzles2020.add(new TicketTranslator(isTest));
         puzzles2020.add(new CubeInitiator(isTest));
         puzzles2020.add(new OperationEvaluator(isTest));

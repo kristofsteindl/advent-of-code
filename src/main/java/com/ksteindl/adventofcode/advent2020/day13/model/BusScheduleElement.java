@@ -3,16 +3,16 @@ package com.ksteindl.adventofcode.advent2020.day13.model;
 public class BusScheduleElement implements Comparable<BusScheduleElement>{
 
     private final int index;
-    private final int busId;
+    private final Long busId;
 
 
-    public BusScheduleElement(int index, int busId) {
+    public BusScheduleElement(int index, Long busId) {
         this.index = index;
         this.busId = busId;
 
     }
 
-    public int getBusId() {
+    public Long getBusId() {
         return busId;
     }
 
@@ -23,5 +23,13 @@ public class BusScheduleElement implements Comparable<BusScheduleElement>{
     @Override
     public int compareTo(BusScheduleElement other) {
         return this.getBusId() < other.getBusId() ? 1 :this.getBusId() > other.getBusId() ? -1 : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "BusScheduleElement{" +
+                "index=" + index +
+                ", busId=" + busId +
+                '}';
     }
 }

@@ -39,8 +39,7 @@ public class ScheduleOptimizer extends Puzzle2020 {
         if (isTest) {
             return getFirstTimestampForSubsequentBuses();
         }
-        // TODO algorithm still not optimized enough
-        return -getDay();
+        return getFirstTimestampForSubsequentBusesChinese();
     }
 
     @Override
@@ -49,23 +48,60 @@ public class ScheduleOptimizer extends Puzzle2020 {
     }
 
     private long getFirstTimestampForSubsequentBuses() {
+        List<BusScheduleElement> busSchedule = getBusSchedule();
+        Collections.sort(busSchedule);
+        Long firstBusId = busSchedule.get(0).getBusId();
+        long t = firstBusId;
+        while (!areSubsequents(t, busSchedule)) {
+            t += firstBusId;
+        }
+        return t;
+    }
+
+    private long getFirstTimestampForSubsequentBusesChinese() {
+        List<BusScheduleElement> busSchedule = getBusSchedule();
+        Long prodOfBusIds = busSchedule.stream().mapToLong(busScheduleELement -> busScheduleELement.getBusId()).reduce(1, (prod, element) -> prod * element);
+        long sum = 0;
+        for (int i = 0; i < busSchedule.size(); i++) {
+            BusScheduleElement element = busSchedule.get(i);
+            Long partialProduct = prodOfBusIds / element.getBusId();
+            Long remainder = element.getIndex() == 0 ? 0 : element.getBusId() - element.getIndex();
+            sum += partialProduct * computeInverse(partialProduct, element.getBusId()) * remainder;
+        }
+        return sum % prodOfBusIds;
+    }
+
+    public static long computeInverse(Long a, Long b){
+        long m = b, t, q;
+        long x = 0, y = 1;
+        if (b == 1) {
+            return 0; // Apply extended Euclid Algorithm
+        }
+        while (a > 1) {
+            q = a / b; // q is quotient
+            t = b; // now proceed same as Euclid's algorithm
+            b = a % b;
+            a = t;
+            t = x;
+            x = y - q * x;
+            y = t;
+        } // Make x1 positive
+        if (y < 0) y += m;
+        return y;
+
+    }
+
+    private List<BusScheduleElement> getBusSchedule() {
         List<String> input = fileManager.parseLines(fileName);
         String[] stringElements = input.get(1).split(",");
         List<BusScheduleElement> busSchedule = new ArrayList<>();
         for (int i = 0; i < stringElements.length; i++) {
             String stringElement = stringElements[i];
             if (!stringElement.equals("x")) {
-                busSchedule.add(new BusScheduleElement(i, Integer.parseInt(stringElement)));
+                busSchedule.add(new BusScheduleElement(i, Long.parseLong(stringElement)));
             }
         }
-        Collections.sort(busSchedule);
-        long t = 0;
-        long firstBusId = busSchedule.get(0).getBusId();
-        while (!areSubsequents(t += firstBusId, busSchedule)) {
-                //logger.debug("t: " + t);
-
-        }
-        return t;
+        return  busSchedule;
     }
 
     private boolean areSubsequents(final long t, final List<BusScheduleElement> busIdSequence) {
@@ -76,6 +112,7 @@ public class ScheduleOptimizer extends Puzzle2020 {
             return true;
         }
         long timeDiff = busIdSequence.get(1).getIndex() - busIdSequence.get(0).getIndex();
+        logger.trace("areSubsequents call:t: " + (t + timeDiff) + ", busSequence: " + busIdSequence.subList(1, busIdSequence.size()).toString());
         return areSubsequents(t + timeDiff, busIdSequence.subList(1, busIdSequence.size()));
     }
 
@@ -109,6 +146,8 @@ public class ScheduleOptimizer extends Puzzle2020 {
     /*
     *
     * References
+    *
+    * https://www.freecodecamp.org/news/how-to-implement-the-chinese-remainder-theorem-in-java-db88a3f1ffe0/
     *
     * */
 }
