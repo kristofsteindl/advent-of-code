@@ -13,6 +13,7 @@ public abstract class AbstractGame implements Game{
 
     protected LinkedList<Integer> player1deck;
     protected LinkedList<Integer> player2deck;
+    protected FinalResult finalResult;
 
     public AbstractGame(GameSetUp gameSetUp) {
         this.player1deck = new LinkedList<>(gameSetUp.getPlayer1deck());
@@ -33,36 +34,23 @@ public abstract class AbstractGame implements Game{
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AbstractGame)) return false;
-        AbstractGame that = (AbstractGame) o;
-        return getPlayer1deck().equals(that.getPlayer1deck()) &&
-                getPlayer2deck().equals(that.getPlayer2deck());
-    }
-
-    @Override
-    public void logGame() {
-        logger.debug("Player 1:");
-        this.getPlayer1deck().forEach(card -> logger.debug(card));
-        logger.debug("Player 2:");
-        this.getPlayer2deck().forEach(card -> logger.debug(card));
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getPlayer1deck(), getPlayer2deck());
-    }
-
-    @Override
-    public WinningState calculateWinningState() {
-        WinningState winningState = new WinningState();
-        if (isWon()) {
-            winningState.setWon(true);
-            winningState.setPlayer2won(!player2deck.isEmpty());
-            winningState.setWinningScore(calculateWinningScore());
+    public FinalResult getFinalResult() {
+        while (finalResult == null) {
+            playRound();
         }
-        return winningState;
+        return finalResult;
+    }
+
+    abstract void playRound();
+
+    protected void addCardsToDecks(boolean player2Won, Integer card1, Integer card2) {
+        if (player2Won) {
+            player2deck.addLast(card2);
+            player2deck.addLast(card1);
+        } else {
+            player1deck.addLast(card1);
+            player1deck.addLast(card2);
+        }
     }
 
     protected boolean isWon() {
@@ -83,6 +71,32 @@ public abstract class AbstractGame implements Game{
             i++;
         }
         return score;
+    }
+
+    protected void setFinalResult(FinalResult finalResult) {
+        this.finalResult = finalResult;
+    }
+
+    public void logGame() {
+        logger.debug("Player 1:");
+        this.getPlayer1deck().forEach(card -> logger.debug(card));
+        logger.debug("Player 2:");
+        this.getPlayer2deck().forEach(card -> logger.debug(card));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractGame)) return false;
+        AbstractGame that = (AbstractGame) o;
+        return getPlayer1deck().equals(that.getPlayer1deck()) &&
+                getPlayer2deck().equals(that.getPlayer2deck());
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPlayer1deck(), getPlayer2deck());
     }
 
 }

@@ -47,8 +47,8 @@ public class Main {
             isTest = args[0].equals(TEST_KEYWORD);
         }
         initPuzzles(isTest);
-        //printSolutions(13);
-        printAllSolutions();
+        printSolutions(22);
+        //printAllSolutions();
     }
 
     private static void initPuzzles(boolean isTest) {

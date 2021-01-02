@@ -10,14 +10,10 @@ public class BasicGame extends AbstractGame implements Game{
     public void playRound() {
         Integer card1 = player1deck.pollFirst();
         Integer card2 = player2deck.pollFirst();
-        if (card1 > card2) {
-            player1deck.addLast(card1);
-            player1deck.addLast(card2);
-        } else {
-            player2deck.addLast(card2);
-            player2deck.addLast(card1);
+        addCardsToDecks(card2 > card1, card1, card2);
+        if (isWon()) {
+            setFinalResult(new FinalResult(player2deck.isEmpty(), calculateWinningScore()));
         }
     }
-
 
 }

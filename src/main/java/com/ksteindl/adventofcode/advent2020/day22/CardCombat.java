@@ -4,6 +4,7 @@ import com.ksteindl.adventofcode.Puzzle2020;
 import com.ksteindl.adventofcode.advent2020.day22.model.BasicGame;
 import com.ksteindl.adventofcode.advent2020.day22.model.Game;
 import com.ksteindl.adventofcode.advent2020.day22.model.GameSetUp;
+import com.ksteindl.adventofcode.advent2020.day22.model.RecursiveGame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,14 +34,12 @@ public class CardCombat extends Puzzle2020 {
 
     @Override
     public Number getFirstSolution() {
-        return getWinningPLayerScore(new BasicGame(gameSetUp));
+        return new BasicGame(gameSetUp).getFinalResult().getWinningScore();
     }
 
     @Override
     public Number getSecondSolution() {
-        AlternativeGame alternativeGame = new AlternativeGame();
-        return (Number) alternativeGame.part2(gameSetUp);
-//        return getWinningPLayerScore(new RecursiveGame(gameSetUp));
+        return new RecursiveGame(gameSetUp).getFinalResult().getWinningScore();
     }
 
     @Override
@@ -48,12 +47,6 @@ public class CardCombat extends Puzzle2020 {
         return DAY;
     }
 
-    public int getWinningPLayerScore(Game game) {
-        while (!game.calculateWinningState().isWon()) {
-            game.playRound();
-        }
-        return game.calculateWinningState().getWinningScore();
-    }
 
     /*
     *
