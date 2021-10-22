@@ -25,7 +25,7 @@ import com.ksteindl.adventofcode.advent2020.day22.CardCombat;
 import com.ksteindl.adventofcode.advent2020.day23.CrabCups;
 import com.ksteindl.adventofcode.advent2020.day24.TileFlipper;
 import com.ksteindl.adventofcode.advent2020.day25.EncryptionBreaker;
-import com.ksteindl.adventofcode.codingchallenge2021.task1.Taks1;
+import com.ksteindl.adventofcode.codingchallenge2021.task1.Day1;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +37,7 @@ public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
     private static final List<Puzzle> puzzles2020 = new ArrayList<>();
     private static final List<Puzzle> cocha2021 = new ArrayList<>();
-    private static final boolean IS_DEV_TEST = true;
+    private static final boolean IS_DEV_TEST = false;
     private static final String TEST_KEYWORD = "test";
 
     public static void main(String[] args) {
@@ -54,7 +54,7 @@ public class Main {
     }
 
     private static void init2021CoChas(boolean isTest) {
-        cocha2021.add(new Taks1(isTest));
+        cocha2021.add(new Day1(isTest));
     }
 
     private static void init(boolean isTest) {
