@@ -48,7 +48,23 @@ public class Day3 extends CoCha2021 {
 
     @Override
     public Object getSecondSolution() {
-        return -1;
+        List<String> lines = fileManager.parseLines(fileName);
+        int invalid = 0;
+        for (int i = 0; i < lines.size() / 3; i++) {
+            List<String> edges0 = Arrays.stream(lines.get(i*3).split("\\s+")).filter(str -> !str.equals("")).collect(Collectors.toList());
+            List<String> edges1 = Arrays.stream(lines.get(i*3 + 1).split("\\s+")).filter(str -> !str.equals("")).collect(Collectors.toList());
+            List<String> edges2 = Arrays.stream(lines.get(i*3 + 2).split("\\s+")).filter(str -> !str.equals("")).collect(Collectors.toList());
+            for (int j = 0; j < 3; j++) {
+                int a = Integer.parseInt(edges0.get(j));
+                int b = Integer.parseInt(edges1.get(j));
+                int c = Integer.parseInt(edges2.get(j));
+                if (a + b <= c || a + c <= b || c + b <= a) {
+                    logger.info(a + ", " + b + ", " + c );
+                    invalid++;
+                }
+            }
+        }
+        return lines.size()-invalid;
     }
 
     @Override
