@@ -28,72 +28,125 @@ public class Day2 extends CoCha2021 {
 
     @Override
     public Object getFirstSolution() {
-        List<Integer> pinCode = new ArrayList<>();
-        int x = 1;
-        int y = 1;
+        List<String> pinCode = new ArrayList<>();
+        int x = 0;
+        int y = 2;
         List<String> lines = fileManager.parseLines(fileName);
         for (String line :lines) {
             for (int i = 0; i < line.length(); i++) {
                 char step = line.charAt(i);
                 switch (step) {
                     case 'U':
-                        if (y > 0) {
+                        if (
+                                x == 2 && y == 1 ||
+                                        x == 1 && y == 2 ||
+                                        x == 2 && y == 2 ||
+                                        x == 3 && y == 2 ||
+
+                                        x == 1 && y == 3 ||
+                                        x == 2 && y == 3 ||
+                                        x == 3 && y == 3 ||
+
+                                        x == 2 && y == 4
+
+                        )
                             y--;
-                        }
                         break;
                     case 'D':
-                        if (y < 2) {
-                            y++;
-                        }
+                        if (
+                                x == 2 && y == 0 ||
+                                        x == 1 && y == 1 ||
+                                        x == 2 && y == 1 ||
+                                        x == 3 && y == 1 ||
+
+                                        x == 1 && y == 2 ||
+                                        x == 2 && y == 2 ||
+                                        x == 3 && y == 2 ||
+
+                                        x == 2 && y == 3
+                        )
+                                y++;
                         break;
                     case 'L':
-                        if (x > 0) {
+                        if (
+                                x == 2 && y == 1 ||
+                                        x == 3 && y == 1 ||
+
+                                        x == 1 && y == 2 ||
+                                        x == 2 && y == 2 ||
+                                        x == 3 && y == 2 ||
+                                        x == 4 && y == 2 ||
+
+                                        x == 2 && y == 3 ||
+                                        x == 3 && y == 3
+                        )
                             x--;
-                        }
                         break;
                     case 'R':
-                        if (x < 2) {
+                        if (
+                                x == 1 && y == 1 ||
+                                        x == 2 && y == 1 ||
+
+                                        x == 1 && y == 2 ||
+                                        x == 2 && y == 2 ||
+                                        x == 3 && y == 2 ||
+                                        x == 0 && y == 2 ||
+
+                                        x == 1 && y == 3 ||
+                                        x == 2 && y == 3
+                        )
                             x++;
-                        }
                         break;
                 }
             }
             addNumber(pinCode, x, y);
         }
         StringBuilder builder = new StringBuilder();
-        for (Integer number: pinCode) {
+        for (String number: pinCode) {
             builder.append(number);
         }
         return builder.toString();
     }
 
-    private void addNumber(List<Integer> pinCode, Integer x, Integer y) {
-        if (x == 0 && y == 0) {
-            pinCode.add(1);
-        }
-        if (x == 1 && y == 0) {
-            pinCode.add(2);
-        }
+    private void addNumber(List<String> pinCode, Integer x, Integer y) {
         if (x == 2 && y == 0) {
-            pinCode.add(3);
-        }
-        if (x == 0 && y == 1) {
-            pinCode.add(4);
+            pinCode.add("1");
         }
         if (x == 1 && y == 1) {
-            pinCode.add(5);
+            pinCode.add("2");
         }
         if (x == 2 && y == 1) {
-            pinCode.add(6);
+            pinCode.add("3");
+        }
+        if (x == 3 && y == 1) {
+            pinCode.add("4");
         }
         if (x == 0 && y == 2) {
-            pinCode.add(7);
+            pinCode.add("5");
         }
         if (x == 1 && y == 2) {
-            pinCode.add(8);
+            pinCode.add("6");
         }
         if (x == 2 && y == 2) {
-            pinCode.add(9);
+            pinCode.add("7");
+        }
+        if (x == 3 && y == 2) {
+            pinCode.add("8");
+        }
+        if (x == 4 && y == 2) {
+            pinCode.add("9");
+        }
+        if (x == 1 && y == 3) {
+            pinCode.add("A");
+        }
+        if (x == 2 && y == 3) {
+            pinCode.add("B");
+        }
+        if (x == 3 && y == 3) {
+            pinCode.add("C");
+        }
+        if (x == 2 && y == 4) {
+            pinCode.add("D");
         }
     }
 
