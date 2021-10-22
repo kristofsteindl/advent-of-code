@@ -1,6 +1,6 @@
 package com.ksteindl.adventofcode.advent2020.day21;
 
-import com.ksteindl.adventofcode.Puzzle2020;
+import com.ksteindl.adventofcode.advent2020.Puzzle2020;
 import com.ksteindl.adventofcode.advent2020.day21.model.Food;
 import com.ksteindl.adventofcode.advent2020.day21.model.ProcessedIngredients;
 import org.apache.logging.log4j.LogManager;

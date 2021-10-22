@@ -1,6 +1,6 @@
 package com.ksteindl.adventofcode.advent2020.day08;
 
-import com.ksteindl.adventofcode.Puzzle2020;
+import com.ksteindl.adventofcode.advent2020.Puzzle2020;
 import com.ksteindl.adventofcode.advent2020.day08.model.Instruction;
 import com.ksteindl.adventofcode.advent2020.day08.model.InstructionType;
 import org.apache.logging.log4j.LogManager;

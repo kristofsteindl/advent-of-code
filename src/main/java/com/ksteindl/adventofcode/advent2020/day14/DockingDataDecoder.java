@@ -1,6 +1,6 @@
 package com.ksteindl.adventofcode.advent2020.day14;
 
-import com.ksteindl.adventofcode.Puzzle2020;
+import com.ksteindl.adventofcode.advent2020.Puzzle2020;
 import com.ksteindl.adventofcode.advent2020.day14.model.LineToDecodeBuilder;
 import com.ksteindl.adventofcode.advent2020.day14.model.LineToDecode;
 import org.apache.logging.log4j.LogManager;

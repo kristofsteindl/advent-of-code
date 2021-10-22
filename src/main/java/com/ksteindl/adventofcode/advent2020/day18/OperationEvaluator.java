@@ -1,6 +1,6 @@
 package com.ksteindl.adventofcode.advent2020.day18;
 
-import com.ksteindl.adventofcode.Puzzle2020;
+import com.ksteindl.adventofcode.advent2020.Puzzle2020;
 import com.ksteindl.adventofcode.advent2020.day18.component.AdvancedEvaluator;
 import com.ksteindl.adventofcode.advent2020.day18.component.BasicEvaluator;
 import com.ksteindl.adventofcode.advent2020.day18.component.Evaluator;

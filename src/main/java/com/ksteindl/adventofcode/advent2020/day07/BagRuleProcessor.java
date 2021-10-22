@@ -1,6 +1,6 @@
 package com.ksteindl.adventofcode.advent2020.day07;
 
-import com.ksteindl.adventofcode.Puzzle2020;
+import com.ksteindl.adventofcode.advent2020.Puzzle2020;
 import com.ksteindl.adventofcode.advent2020.day07.pojo.Bag;
 import com.ksteindl.adventofcode.advent2020.day07.pojo.Bags;
 import org.apache.logging.log4j.LogManager;

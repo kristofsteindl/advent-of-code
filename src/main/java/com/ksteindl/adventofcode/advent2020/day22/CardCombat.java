@@ -1,6 +1,6 @@
 package com.ksteindl.adventofcode.advent2020.day22;
 
-import com.ksteindl.adventofcode.Puzzle2020;
+import com.ksteindl.adventofcode.advent2020.Puzzle2020;
 import com.ksteindl.adventofcode.advent2020.day22.model.BasicGame;
 import com.ksteindl.adventofcode.advent2020.day22.model.Game;
 import com.ksteindl.adventofcode.advent2020.day22.model.GameSetUp;

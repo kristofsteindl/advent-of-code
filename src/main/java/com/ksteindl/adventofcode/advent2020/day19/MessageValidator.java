@@ -1,6 +1,6 @@
 package com.ksteindl.adventofcode.advent2020.day19;
 
-import com.ksteindl.adventofcode.Puzzle2020;
+import com.ksteindl.adventofcode.advent2020.Puzzle2020;
 import com.ksteindl.adventofcode.advent2020.day19.model.BranchRule;
 import com.ksteindl.adventofcode.advent2020.day19.model.LeafRule;
 import com.ksteindl.adventofcode.advent2020.day19.model.MatchResult;

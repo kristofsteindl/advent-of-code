@@ -2,14 +2,12 @@ package com.ksteindl.adventofcode;
 
 import com.ksteindl.adventofcode.utils.FileManager;
 
-public abstract class Puzzle2020 {
-
-    protected static String FOLDER_NAME = "./src/main/resources/com/ksteindl/adventofcode/advent2020/input/";
+public abstract class Puzzle {
 
     protected final FileManager fileManager;
     protected final boolean isTest;
 
-    public Puzzle2020(boolean isTest) {
+    public Puzzle(boolean isTest) {
         this.fileManager = new FileManager();
         this.isTest = isTest;
     }
