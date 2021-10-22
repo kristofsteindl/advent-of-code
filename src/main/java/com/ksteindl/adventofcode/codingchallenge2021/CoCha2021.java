@@ -1,4 +1,4 @@
-package com.ksteindl.adventofcode.codingchallange2021;
+package com.ksteindl.adventofcode.codingchallenge2021;
 
 import com.ksteindl.adventofcode.Puzzle;
 

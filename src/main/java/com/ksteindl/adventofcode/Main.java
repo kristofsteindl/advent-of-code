@@ -1,6 +1,5 @@
 package com.ksteindl.adventofcode;
 
-import com.ksteindl.adventofcode.advent2020.Puzzle2020;
 import com.ksteindl.adventofcode.advent2020.day01.Find2020;
 import com.ksteindl.adventofcode.advent2020.day02.TobogganPasswordValidator;
 import com.ksteindl.adventofcode.advent2020.day03.TrajectoryCalculator;
@@ -26,8 +25,7 @@ import com.ksteindl.adventofcode.advent2020.day22.CardCombat;
 import com.ksteindl.adventofcode.advent2020.day23.CrabCups;
 import com.ksteindl.adventofcode.advent2020.day24.TileFlipper;
 import com.ksteindl.adventofcode.advent2020.day25.EncryptionBreaker;
-import com.ksteindl.adventofcode.codingchallange2021.CoCha2021;
-import com.ksteindl.adventofcode.codingchallange2021.task1.Taks1;
+import com.ksteindl.adventofcode.codingchallenge2021.task1.Taks1;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

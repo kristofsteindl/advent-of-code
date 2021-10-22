@@ -1,7 +1,6 @@
-package com.ksteindl.adventofcode.codingchallange2021.task1;
+package com.ksteindl.adventofcode.codingchallenge2021.task1;
 
-import com.ksteindl.adventofcode.advent2020.day21.AllergenFinder;
-import com.ksteindl.adventofcode.codingchallange2021.CoCha2021;
+import com.ksteindl.adventofcode.codingchallenge2021.CoCha2021;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
