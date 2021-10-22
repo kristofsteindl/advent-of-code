@@ -28,6 +28,7 @@ import com.ksteindl.adventofcode.advent2020.day25.EncryptionBreaker;
 import com.ksteindl.adventofcode.codingchallenge2021.task1.Day1;
 import com.ksteindl.adventofcode.codingchallenge2021.task2.Day2;
 import com.ksteindl.adventofcode.codingchallenge2021.task3.Day3;
+import com.ksteindl.adventofcode.codingchallenge2021.task4.Day4;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,7 +52,7 @@ public class Main {
             isTest = args[0].equals(TEST_KEYWORD);
         }
         init(isTest);
-        printSolutions(3, cocha2021);
+        printSolutions(4, cocha2021);
         //printAllSolutions();
     }
 
@@ -59,6 +60,7 @@ public class Main {
         cocha2021.add(new Day1(isTest));
         cocha2021.add(new Day2(isTest));
         cocha2021.add(new Day3(isTest));
+        cocha2021.add(new Day4(isTest));
     }
 
     private static void init(boolean isTest) {
