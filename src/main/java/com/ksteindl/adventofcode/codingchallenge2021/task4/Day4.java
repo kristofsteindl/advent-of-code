@@ -41,13 +41,13 @@ public class Day4 extends CoCha2021 {
                 }
             }
             List<Character> sortedChars = chars.entrySet().stream()
-                    .peek(entry1 -> System.out.println(entry1.getKey() + ", " + (int)(entry1.getValue().get() * 1000 + entry1.getKey().charValue())))
+                    //.peek(entry1 -> System.out.println(entry1.getKey() + ", " + (int)(entry1.getValue().get() * 1000 + entry1.getKey().charValue())))
                     .sorted((entry1, entry2) -> (entry1.getValue().get() * 1000 - entry1.getKey()) < (entry2.getValue().get() * 1000 - entry2.getKey()) ? 1 : -1)
                     .map(entry -> entry.getKey())
                     .collect(Collectors.toList());
-            logger.info(sortedChars);
+            //logger.info(sortedChars);
             String splitted = components[components.length - 1].split("\\[")[1];
-            logger.info(splitted);
+            //logger.info(splitted);
             boolean match = true;
             for (int i = 0; i < 5; i++) {
                 match = match && sortedChars.get(i).equals(splitted.charAt(i));
@@ -63,8 +63,59 @@ public class Day4 extends CoCha2021 {
 
     @Override
     public Object getSecondSolution() {
+        List<String> lines = fileManager.parseLines(fileName);
+        for (String line : lines) {
+            String[] components = line.split("-");
+            Map<Character, AtomicInteger> chars = new TreeMap<>();
+            for (int i = 0; i < components.length - 1; i++) {
+                for (int j = 0; j < components[i].length(); j++) {
+                    Character character = components[i].charAt(j);
+                    if (chars.get(character) == null) {
+                        chars.put(character, new AtomicInteger(0));
+                    }
+                    chars.get(character).addAndGet(1);
+                }
+            }
+            List<Character> sortedChars = chars.entrySet().stream()
+                   // .peek(entry1 -> System.out.println(entry1.getKey() + ", " + (int)(entry1.getValue().get() * 1000 + entry1.getKey().charValue())))
+                    .sorted((entry1, entry2) -> (entry1.getValue().get() * 1000 - entry1.getKey()) < (entry2.getValue().get() * 1000 - entry2.getKey()) ? 1 : -1)
+                    .map(entry -> entry.getKey())
+                    .collect(Collectors.toList());
+            //logger.info(sortedChars);
+            String splitted = components[components.length - 1].split("\\[")[1];
+            //logger.info(splitted);
+            boolean match = true;
+            for (int i = 0; i < 5; i++) {
+                match = match && sortedChars.get(i).equals(splitted.charAt(i));
+            }
+            if (match) {
+                String last = line.split("-")[line.split("-").length - 1];
 
-        return null;
+                Integer sectorId = Integer.parseInt(last.split("\\[")[0]);
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < line.length(); i++) {
+                    char character = line.charAt(i);
+
+                    if (character == '-') {
+                        builder.append(' ');
+                    } else {
+                        int newC = character + sectorId % 26;
+                        if (newC > 122) {
+                            newC -= 26;
+                        }
+                        builder.append((char)newC);
+                    }
+
+                }
+                if (builder.toString().contains("northpole object storage")) {
+                    logger.info(builder.toString());
+                    logger.info(sectorId);
+                }
+
+            }
+        }
+        return -1;
+
     }
 
     @Override
