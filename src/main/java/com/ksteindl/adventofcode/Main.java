@@ -1,30 +1,33 @@
 package com.ksteindl.adventofcode;
 
+import com.ksteindl.adventofcode.advent2020.day02.TobogganPasswordValidator;
+import com.ksteindl.adventofcode.advent2020.day03.TrajectoryCalculator;
+import com.ksteindl.adventofcode.advent2020.day04.PassportScanner;
+import com.ksteindl.adventofcode.advent2020.day05.SeatScanner;
+import com.ksteindl.adventofcode.advent2020.day06.CustomFormProcessor;
+import com.ksteindl.adventofcode.advent2020.day07.BagRuleProcessor;
+import com.ksteindl.adventofcode.advent2020.day08.BootingCodeAnalyzer;
+import com.ksteindl.adventofcode.advent2020.day09.XmasEncoder;
+import com.ksteindl.adventofcode.advent2020.day10.AdapterCombiner;
+import com.ksteindl.adventofcode.advent2020.day11.SeatPredictor;
+import com.ksteindl.adventofcode.advent2020.day12.NavigationHelper;
+import com.ksteindl.adventofcode.advent2020.day13.ScheduleOptimizer;
+import com.ksteindl.adventofcode.advent2020.day14.DockingDataDecoder;
+import com.ksteindl.adventofcode.advent2020.day15.MemoryChallange;
+import com.ksteindl.adventofcode.advent2020.day16.TicketTranslator;
+import com.ksteindl.adventofcode.advent2020.day17.CubeInitiator;
+import com.ksteindl.adventofcode.advent2020.day18.OperationEvaluator;
+import com.ksteindl.adventofcode.advent2020.day19.MessageValidator;
+import com.ksteindl.adventofcode.advent2020.day20.ImageReconstruator;
+import com.ksteindl.adventofcode.advent2020.day21.AllergenFinder;
+import com.ksteindl.adventofcode.advent2020.day22.CardCombat;
+import com.ksteindl.adventofcode.advent2020.day23.CrabCups;
+import com.ksteindl.adventofcode.advent2020.day24.TileFlipper;
+import com.ksteindl.adventofcode.advent2020.day25.EncryptionBreaker;
+import com.ksteindl.adventofcode.advent2021.day03.DiagnisticDecoder;
+import com.ksteindl.adventofcode.advent2021.day04.SquidBingo;
 import com.ksteindl.adventofcode.advent2021.day01.LevelCalculator;
-import com.ksteindl.adventofcode.advent2021.day02.TobogganPasswordValidator;
-import com.ksteindl.adventofcode.advent2021.day03.TrajectoryCalculator;
-import com.ksteindl.adventofcode.advent2021.day04.PassportScanner;
-import com.ksteindl.adventofcode.advent2021.day05.SeatScanner;
-import com.ksteindl.adventofcode.advent2021.day06.CustomFormProcessor;
-import com.ksteindl.adventofcode.advent2021.day07.BagRuleProcessor;
-import com.ksteindl.adventofcode.advent2021.day08.BootingCodeAnalyzer;
-import com.ksteindl.adventofcode.advent2021.day09.XmasEncoder;
-import com.ksteindl.adventofcode.advent2021.day10.AdapterCombiner;
-import com.ksteindl.adventofcode.advent2021.day11.SeatPredictor;
-import com.ksteindl.adventofcode.advent2021.day12.NavigationHelper;
-import com.ksteindl.adventofcode.advent2021.day13.ScheduleOptimizer;
-import com.ksteindl.adventofcode.advent2021.day14.DockingDataDecoder;
-import com.ksteindl.adventofcode.advent2021.day15.MemoryChallange;
-import com.ksteindl.adventofcode.advent2021.day16.TicketTranslator;
-import com.ksteindl.adventofcode.advent2021.day17.CubeInitiator;
-import com.ksteindl.adventofcode.advent2021.day18.OperationEvaluator;
-import com.ksteindl.adventofcode.advent2021.day19.MessageValidator;
-import com.ksteindl.adventofcode.advent2021.day20.ImageReconstruator;
-import com.ksteindl.adventofcode.advent2021.day21.AllergenFinder;
-import com.ksteindl.adventofcode.advent2021.day22.CardCombat;
-import com.ksteindl.adventofcode.advent2021.day23.CrabCups;
-import com.ksteindl.adventofcode.advent2021.day24.TileFlipper;
-import com.ksteindl.adventofcode.advent2021.day25.EncryptionBreaker;
+import com.ksteindl.adventofcode.advent2021.day02.PositionCalculator;
 import com.ksteindl.adventofcode.codingchallenge2021.task1.Day1;
 import com.ksteindl.adventofcode.codingchallenge2021.task2.Day2;
 import com.ksteindl.adventofcode.codingchallenge2021.task3.Day3;
@@ -41,7 +44,7 @@ public class Main {
     private static final List<Puzzle> puzzles2020 = new ArrayList<>();
     private static final List<Puzzle> cocha2021 = new ArrayList<>();
     private static final List<Puzzle> puzzles2021 = new ArrayList<>();
-    private static final boolean IS_DEV_TEST = false;
+    private static final boolean IS_DEV_TEST = true;
     private static final String TEST_KEYWORD = "test";
 
     public static void main(String[] args) {
@@ -53,7 +56,7 @@ public class Main {
             isTest = args[0].equals(TEST_KEYWORD);
         }
         init(isTest);
-        printSolutions(1, puzzles2021);
+        printSolutions(4, puzzles2021);
         //printAllSolutions();
     }
 
@@ -66,6 +69,9 @@ public class Main {
 
     private static void init2021Puzzles(boolean isTest) {
         puzzles2021.add(new LevelCalculator(isTest));
+        puzzles2021.add(new PositionCalculator(isTest));
+        puzzles2021.add(new DiagnisticDecoder(isTest));
+        puzzles2021.add(new SquidBingo(isTest));
     }
 
     private static void init2021CoChas(boolean isTest) {
