@@ -70,37 +70,55 @@ public class CaveFinder extends Puzzle2021 {
     private List<Route> extend(Route route) {
         List<Route> extensions = new ArrayList<>();
         String terminal = route.get(route.route.size() - 1);
-//        paths.stream()
-//                .filter(path -> path.a.equals(terminal) || path.b.equals(terminal))
-        for (Path path : paths) {
-            Route extended = getExtended(terminal, path, route);
-            if (extended != null) {
-                if (route.twice != null) {
-                    extended.twice = route.twice;
-                }
-                
-                extensions.add(extended);
-            }
-        }
-        return extensions;
+        return paths.stream()
+                .map(path -> getExtended(terminal, path, route))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+//        for (Path path : paths) {
+//            Optional<Route> extendedOpt = getExtended2(terminal, path, route);
+//            if (extendedOpt.isPresent()) {
+//                Route extended = extendedOpt.get();
+//                extensions.add(extended);
+//            }
+//        }
+//        return extensions;
     }
-    
-    private Route getExtended(String terminal, Path path, Route route) {
-        Route extended = null;
+
+    private Optional<Route> getExtendedOld(String terminal, Path path, Route route) {
         if (path.a.equals(terminal)) {
             if (!deadEnd(route, path.b)) {
-                extended = new Route(route);
+                Route extended = new Route(route);
                 extended.twice = getTwice(route, path.b);
                 extended.add(path.b);
+                return Optional.of(extended);
             }
         } else if (path.b.equals(terminal)) {
             if (!deadEnd(route, path.a)) {
-                extended = new Route(route);
+                Route extended = new Route(route);
                 extended.twice = getTwice(route, path.a);
                 extended.add(path.a);
+                return Optional.of(extended);
             }
         }
-        return extended;
+        return Optional.empty();
+    }
+    
+    private Optional<Route> getExtended(String terminal, Path path, Route route) {
+        String next = terminal.equals(path.a) ? path.b : (terminal.equals(path.b) ? path.a : null);
+        if (next == null) {
+            return Optional.empty();
+        }
+        if (deadEnd(route, next)) {
+            return Optional.empty();
+        }
+        Route extended = new Route(route);
+        extended.twice = getTwice(route, next);
+        if (route.twice != null) {
+            extended.twice = route.twice;
+        }
+        extended.add(next);
+        return Optional.of(extended);
     }
     
     private String getTwice(Route route, String nextCave) {
