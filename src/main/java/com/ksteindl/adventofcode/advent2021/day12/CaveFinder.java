@@ -68,41 +68,14 @@ public class CaveFinder extends Puzzle2021 {
     }
     
     private List<Route> extend(Route route) {
-        List<Route> extensions = new ArrayList<>();
         String terminal = route.get(route.route.size() - 1);
         return paths.stream()
                 .map(path -> getExtended(terminal, path, route))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
-//        for (Path path : paths) {
-//            Optional<Route> extendedOpt = getExtended2(terminal, path, route);
-//            if (extendedOpt.isPresent()) {
-//                Route extended = extendedOpt.get();
-//                extensions.add(extended);
-//            }
-//        }
-//        return extensions;
     }
 
-    private Optional<Route> getExtendedOld(String terminal, Path path, Route route) {
-        if (path.a.equals(terminal)) {
-            if (!deadEnd(route, path.b)) {
-                Route extended = new Route(route);
-                extended.twice = getTwice(route, path.b);
-                extended.add(path.b);
-                return Optional.of(extended);
-            }
-        } else if (path.b.equals(terminal)) {
-            if (!deadEnd(route, path.a)) {
-                Route extended = new Route(route);
-                extended.twice = getTwice(route, path.a);
-                extended.add(path.a);
-                return Optional.of(extended);
-            }
-        }
-        return Optional.empty();
-    }
     
     private Optional<Route> getExtended(String terminal, Path path, Route route) {
         String next = terminal.equals(path.a) ? path.b : (terminal.equals(path.b) ? path.a : null);
@@ -114,21 +87,21 @@ public class CaveFinder extends Puzzle2021 {
         }
         Route extended = new Route(route);
         extended.twice = getTwice(route, next);
-        if (route.twice != null) {
+        if (route.twice) {
             extended.twice = route.twice;
         }
         extended.add(next);
         return Optional.of(extended);
     }
     
-    private String getTwice(Route route, String nextCave) {
+    private boolean getTwice(Route route, String nextCave) {
         for (int i = 0; i < route.size(); i++) {
             String cave = route.get(i);
             if (cave.equals(nextCave) && cave.equals(cave.toLowerCase())) {
-                return cave;
+                return true;
             }
         }
-        return null;
+        return false;
     }
     
     private boolean deadEnd(Route route, String nextCave) {
@@ -145,7 +118,7 @@ public class CaveFinder extends Puzzle2021 {
         if (visited.equals(visited.toUpperCase())) {
             return false;
         }
-        if (route.twice == null) {
+        if (!route.twice) {
             return false;
         }
         return true;
@@ -173,7 +146,7 @@ public class CaveFinder extends Puzzle2021 {
     
     static class Route {
         List<String> route = new ArrayList<>();
-        String twice = null;
+        boolean twice = false;
 
         public Route() {
         }
@@ -218,7 +191,6 @@ public class CaveFinder extends Puzzle2021 {
         @Override
         public int hashCode() {
             return a.hashCode() * b.hashCode();
-            
         }
     }
     
