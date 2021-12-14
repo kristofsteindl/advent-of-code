@@ -46,41 +46,73 @@ public class Polymerizator extends Puzzle2021 {
         Map<Reaction, Character> reactions = lines.subList(2, lines.size()).stream()
                 .map(line -> new Reaction(line.charAt(0), line.charAt(1), line.charAt(6)))
                 .collect(Collectors.toMap(r->r, r->r.product));
-        
-        List<Character> prevTemplate = new ArrayList<>(template);
-        for (int i = 0; i < 10; i++) {
-            List<Character> newProducts = new ArrayList<>();
-            for (int j = 1; j < prevTemplate.size(); j++) {
-                Character reagant1 = prevTemplate.get(j-1);
-                Character reagant2 = prevTemplate.get(j);
-                Reaction reaction = new Reaction(reagant1, reagant2);
-                Character product = reactions.get(reaction);
-                newProducts.add(product);
+
+        Map<PositionedPair, AtomicLong> prevTemplate = new HashMap<>(template);
+        for (int i = 0; i < 40; i++) {
+            Map<PositionedPair, AtomicLong> nextProducts = new HashMap<>();
+            for (PositionedPair pair : prevTemplate.keySet()) {
+                Reaction reaction = new Reaction(pair.r1, pair.r2);
+                Character newProduct = reactions.get(reaction);
+
+                PositionedPair p1 = new PositionedPair(pair.prev, pair.r1, newProduct, pair.r2);
+                if (nextProducts.get(p1) == null) {
+                    nextProducts.put(p1, new AtomicLong());
+                }
+                nextProducts.get(p1).addAndGet(prevTemplate
+                        .get(pair)
+                        .get());
+
+                PositionedPair p2 = new PositionedPair(pair.r1, newProduct, pair.r2, pair.next);
+                if (nextProducts.get(p2) == null) {
+                    nextProducts.put(p2, new AtomicLong());
+                }
+                nextProducts.get(p2).addAndGet(prevTemplate.get(pair).get());
+                
+                
+                
             }
-            List<Character> newTemplate = new ArrayList<>();
-            newTemplate.add(prevTemplate.get(0));
-            for (int j = 1; j < prevTemplate.size(); j++) {
-                newTemplate.add(newProducts.get(j-1));
-                newTemplate.add(prevTemplate.get(j));
-            }
-            prevTemplate = newTemplate;
+            prevTemplate = nextProducts;
+            
 
         }
-        Map<Character, List<Character>> grouped = prevTemplate.stream().collect(groupingBy(c -> c));
-        List<List<Character>> sorted = grouped.values().stream().sorted((list1, list2) -> list1.size() > list2.size() ? -1 : 1).collect(Collectors.toList());
-        return sorted.get(0).size() - sorted.get(sorted.size() - 1).size();
+        Map<Character, AtomicLong> result = new HashMap<>();
+        for (Map.Entry<PositionedPair, AtomicLong> entry : prevTemplate.entrySet()) {
+            if(!result.containsKey(entry.getKey().r1)) {
+                result.put(entry.getKey().r1, new AtomicLong());
+            }
+            if(!result.containsKey(entry.getKey().r2)) {
+                result.put(entry.getKey().r2, new AtomicLong());
+            }
+            if (entry.getKey().prev == null) {
+             result.get(entry.getKey().r1).addAndGet(entry.getValue().get() * 2);
+            } else {
+             result.get(entry.getKey().r1).addAndGet(entry.getValue().get());
+            }
+             
+            if (entry.getKey().next == null) {
+                result.get(entry.getKey().r2).addAndGet(entry.getValue().get() * 2);
+            } else {
+                result.get(entry.getKey().r2).addAndGet(entry.getValue().get());
+            }
+        }
+        List<Long> sorted = result.entrySet().stream()
+                .sorted((entry1, entry2) -> entry1.getValue().get() > entry2.getValue().get() ? -1 : 1)
+                .map(entry -> entry.getValue().get() / 2)
+                .collect(Collectors.toList());
+        return sorted.get(0) - sorted.get(sorted.size() - 1);
+
     }
     
     private Map<PositionedPair, AtomicLong> getTemplate() {
         List<String> lines = fileManager.parseLines(fileName);
         char[] charTemplate = lines.get(0).toCharArray();
         Map<PositionedPair, AtomicLong> template = new HashMap<>();
-        template.put(new PositionedPair(charTemplate[0], charTemplate[1], null, charTemplate[3]), new AtomicLong(1));
-        for (int i = 1; i < charTemplate.length - -2; i++) {
+        template.put(new PositionedPair(null, charTemplate[0], charTemplate[1], charTemplate[2]), new AtomicLong(1));
+        for (int i = 1; i < charTemplate.length -2; i++) {
             PositionedPair lastPair = new PositionedPair(
+                    charTemplate[i - 1],
                     charTemplate[i],
                     charTemplate[i + 1],
-                    charTemplate[i - 1],
                     charTemplate[i + 2]);
             if (template.get(lastPair) == null) {
                 template.put(lastPair, new AtomicLong());
@@ -97,15 +129,15 @@ public class Polymerizator extends Puzzle2021 {
 
 
     private static class PositionedPair {
+        final Character prev;
         final Character r1;
         final Character r2;
-        final Character prev;
         final Character next;
 
-        public PositionedPair(Character r1, Character r2, Character prev, Character next) {
+        public PositionedPair(Character prev, Character r1, Character r2, Character next) {
+            this.prev = prev;
             this.r1 = r1;
             this.r2 = r2;
-            this.prev = prev;
             this.next = next;
         }
 
