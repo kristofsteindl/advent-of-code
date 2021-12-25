@@ -47,40 +47,26 @@ public class ChitonAvoider extends Puzzle2021 {
     @Override
     public Number getFirstSolution() {
         List<Route> terminals = new ArrayList<>();
-        int sum1 = 0;
-        for (int i = 0; i < cave[0][i]; i++) {
-            sum1 += cave[0][i];
-        }
-        for (int j = 1; j < cave.length - 1; j++) {
-            sum1 += cave[j][cave[0].length -1];
-        }
-
-        int sum2 = 0;
-        for (int i = 0; i < cave[0][i]; i++) {
-            sum1 += cave[0][i];
-        }
-        for (int j = 1; j < cave.length - 1; j++) {
-            sum1 += cave[j][cave[0].length -1];
-        }
-        
-        
-        Route start = new Route(height, width);
-        start.mark(0, 0);
-        List<Route> prevSumExpanded = new ArrayList<>();
-        prevSumExpanded.add(start);
-        while (!prevSumExpanded.isEmpty()) {
-            List<Route> sumExpanded = new ArrayList<>();
-            for (Route route : prevSumExpanded) {
-                List<Route> expandedRoutes = route.expand();
-                for (Route expanded : expandedRoutes) {
-                    if (expanded.headRow == height - 1 && expanded.headRow == width - 1) {
-                        terminals.add(expanded);
-                    } else {
-                        sumExpanded.add(expanded);
-                    }
+        Route start = new Route(cave.length, cave[0].length);
+        List<Route> prevRoutes = new ArrayList<>();
+        prevRoutes.add(start);
+        for (int i = 0; i < cave.length + cave[0].length - 2; i++) {
+            List<Route> nextRoutes = new ArrayList<>();
+            for (Route route : prevRoutes) {
+                if (route.headColumn < route.map[0].length - 1) {
+                    Route next = route.cloned();
+                    next.mark(next.headRow, next.headColumn + 1);
+                    next.headColumn = next.headColumn + 1;
+                    nextRoutes.add(next);
+                }
+                if (route.headRow < route.map.length - 1) {
+                    Route next = route.cloned();
+                    next.mark(next.headRow + 1, next.headColumn);
+                    next.headRow = next.headRow + 1;
+                    nextRoutes.add(next);
                 }
             }
-            prevSumExpanded = sumExpanded;
+            prevRoutes = nextRoutes;
         }
         return -1;
     }
@@ -137,7 +123,7 @@ public class ChitonAvoider extends Puzzle2021 {
             return expandedRoutes;
         }
         
-        private Route cloned() {
+        public Route cloned() {
             boolean[][] clonedMap = new boolean[map.length][map[0].length];
             for (int i = 0; i < map.length; i++) {
                 for (int j = 0; j < map[0].length; j++) {
