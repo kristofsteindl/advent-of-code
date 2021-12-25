@@ -46,15 +46,128 @@ public class NumberAdder extends Puzzle2021 {
     }
 
     public static void main(String[] args) {
-        NumberAdder day = new NumberAdder(true);
+        NumberAdder day = new NumberAdder(false);
         logger.info(day.getFirstSolution());
         logger.info(day.getSecondSolution());
     }
 
+    @Override
+    public Number getSecondSolution() {
+        long max = 0;
+        for (int leftIndex = 0; leftIndex < elementRows.size(); leftIndex++) {
+            for (int rightIndex = 0; rightIndex < elementRows.size(); rightIndex++) {
+                List<Element> left = elementRows.get(leftIndex);
+                List<Element> right = elementRows.get(rightIndex);
+                List<Element> added = addTwoLines(left, right);
+                long sum = getMagnitude(added);
+                if (leftIndex != rightIndex && sum > max) {
+                    print(left);
+                    print(right);
+                    max = sum;
+                }
+            }
+        }
+        return max;
+    }
+
+    @Override
+    public Number getFirstSolution() {
+        List<Element> first = elementRows.get(0);
+        for (int row = 1; row < elementRows.size(); row++) {
+            List<Element> second = elementRows.get(row);
+            List<Element> added = addTwoLines(first, second);
+            first = added;
+        }
+        return getMagnitude(first);
+    }
+    
+    private List<Element> addTwoLines(List<Element> first, List<Element> second) {
+//        System.out.println("Before addition, sum: ");
+//        print(first);
+        List<Element> added = new ArrayList<>();
+        added.add(new Element(Type.OPEN));
+        added.addAll(first);
+        added.add(new Element(Type.COLON));
+        added.addAll(second);
+        added.add(new Element(Type.CLOSE));
+//        System.out.println("After addition, before reduction: ");
+//        print(added);
+        while (reduce(added)) {
+        }
+        return added;
+    }
+    
+    private boolean reduce(List<Element> added) {
+        boolean shouldReduce = false;
+        int index = 0;
+        int open = 0;
+        while (!shouldReduce && index < added.size()) {
+            Element element = added.get(index);
+
+            if (element.type == Type.OPEN) {
+                open++;
+            } else if (element.type == Type.CLOSE) {
+                open--;
+            }
+            if (open == 5) {
+                shouldReduce = true;
+                explode(added, index);
+//                System.out.println("After explosion: ");
+//                print(added);
+            }
+            index++;
+        }
+        index = 0;
+        while (!shouldReduce && index < added.size()) {
+            Element element = added.get(index);
+            if (element.type == Type.NUMBER && element.value > 9) {
+                shouldReduce = true;
+                added.remove(index);
+                split(added, index, element);
+//                System.out.println("After split: ");
+//                print(added);
+            }
+            index++;
+        }
+        return shouldReduce;
+    }
+    
+    private void split(List<Element> added, Integer index, Element element) {
+        Integer tenSmth = element.value;
+        int firstHalf = tenSmth / 2;
+        int secondHalf = firstHalf * 2 == tenSmth ? firstHalf : firstHalf + 1;
+        added.add(index, new Element(Type.CLOSE));
+        added.add(index, new Element(Type.NUMBER, secondHalf));
+        added.add(index, new Element(Type.COLON));
+        added.add(index, new Element(Type.NUMBER, firstHalf));
+        added.add(index, new Element(Type.OPEN));
+    }
+    
+    private void explode(List<Element> added, int index) {
+        Integer left = added.get(index + 1).value;
+        Integer right = added.get(index + 3).value;
+        for (int leftIndex = index; leftIndex >= 0; leftIndex--) {
+            if (added.get(leftIndex).type == Type.NUMBER) {
+                added.set(leftIndex, new Element(Type.NUMBER, added.get(leftIndex).value + left));
+                break;
+            }
+        }
+        for (int rightIndex = index + 4; rightIndex < added.size(); rightIndex++) {
+            if (added.get(rightIndex).type == Type.NUMBER) {
+                added.set(rightIndex, new Element(Type.NUMBER, added.get(rightIndex).value + right));
+                break;
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            added.remove(index);
+        }
+        added.add(index, new Element(Type.NUMBER, 0));
+    }
+
     private long getMagnitude(List<Element> elements) {
         while (elements.size() > 1) {
-            System.out.println("Before magnitude reduction: ");
-            print(elements);
+//            System.out.println("Before magnitude reduction: ");
+//            print(elements);
             int index = elements.size() - 1;
             while (index >= 0) {
                 if (
@@ -78,85 +191,7 @@ public class NumberAdder extends Puzzle2021 {
         }
         return elements.get(0).value;
     }
-
-    @Override
-    public Number getFirstSolution() {
-        List<Element> sum = elementRows.get(0);
-        for (int row = 1; row < elementRows.size(); row++) {
-            System.out.println("Before addition, sum: ");
-            print(sum);
-            List<Element> added = new ArrayList<>();
-            added.add(new Element(Type.OPEN));
-            added.addAll(sum);
-            added.add(new Element(Type.COLON));
-            added.addAll(elementRows.get(row));
-            added.add(new Element(Type.CLOSE));
-            System.out.println("After addition, before reduction: ");
-            print(added);
-            boolean shouldReduce = true;
-            while (shouldReduce) {
-                shouldReduce = false;
-                int index = 0;
-                int open = 0;
-                while (!shouldReduce && index < added.size()) {
-                    Element element = added.get(index);
-                    
-                    if (element.type == Type.OPEN) {
-                        open++;
-                    } else if (element.type == Type.CLOSE) {
-                        open--;
-                    } 
-                    if (open == 5) {
-                        shouldReduce = true;
-                        Integer left = added.get(index + 1).value;
-                        Integer right = added.get(index + 3).value;
-                        for (int leftIndex = index; leftIndex >= 0; leftIndex--) {
-                            if (added.get(leftIndex).type == Type.NUMBER) {
-                                added.set(leftIndex, new Element(Type.NUMBER, added.get(leftIndex).value + left));
-                                break;
-                            }
-                        }
-                        for (int rightIndex = index + 4; rightIndex < added.size(); rightIndex++) {
-                            if (added.get(rightIndex).type == Type.NUMBER) {
-                                added.set(rightIndex, new Element(Type.NUMBER, added.get(rightIndex).value + right));
-                                break;
-                            }
-                        }
-                        for (int i = 0; i < 5; i++) {
-                            added.remove(index);
-                        }
-                        added.add(index, new Element(Type.NUMBER, 0));
-                        System.out.println("After exposion: ");
-                        print(added);
-                    }
-                    index++;
-                }
-                index = 0;
-                while (!shouldReduce && index < added.size()) {
-                    Element element = added.get(index);
-                    if (element.type == Type.NUMBER && element.value > 9) {
-                        shouldReduce = true;
-                        Integer tenSmth = element.value;
-                        added.remove(index);
-                        int first = tenSmth / 2;
-                        int second = first * 2 == tenSmth ? first : first + 1;
-                        added.add(index, new Element(Type.CLOSE));
-                        added.add(index, new Element(Type.NUMBER, second));
-                        added.add(index, new Element(Type.COLON));
-                        added.add(index, new Element(Type.NUMBER, first));
-                        added.add(index, new Element(Type.OPEN));
-                        System.out.println("After split: ");
-                        print(added);
-                    }
-                    index++;
-                }
-            }
-            sum = added;
-        }
-        return getMagnitude(sum);
-    }
     
- 
     
     enum Type {OPEN, CLOSE, COLON, NUMBER;}
     
@@ -197,15 +232,7 @@ public class NumberAdder extends Puzzle2021 {
         }
         System.out.println(builder);
     }
-
     
-
-    @Override
-    public Number getSecondSolution() {
-        return getDay();
-    }
-    
-
     @Override
     public int getDay() {
         return DAY;
