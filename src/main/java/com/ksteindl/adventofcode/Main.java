@@ -44,6 +44,7 @@ public class Main {
     private static final List<Puzzle> puzzles2020 = new ArrayList<>();
     private static final List<Puzzle> cocha2021 = new ArrayList<>();
     private static final List<Puzzle> puzzles2021 = new ArrayList<>();
+    private static final List<Puzzle> puzzles2022 = new ArrayList<>();
     private static final boolean IS_DEV_TEST = true;
     private static final String TEST_KEYWORD = "test";
 

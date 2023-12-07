@@ -11,14 +11,12 @@ import java.util.List;
 public class FileManager {
 
     public List<String> parseLines(String fileName) {
-        List<String> lines = Collections.emptyList();
         try {
-            lines = Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8);
+            return Collections.unmodifiableList(Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8));
         }
         catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return lines;
     }
 
     public List<List<String>> parseLinesAndGroupByEmptyLines(String fileName) {
