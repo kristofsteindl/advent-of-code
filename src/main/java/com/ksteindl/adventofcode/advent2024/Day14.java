@@ -1,13 +1,15 @@
 package com.ksteindl.adventofcode.advent2024;
 
-import com.ksteindl.adventofcode.advent2021.day04.Board;
-
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Day14 extends Puzzle2024 {
 
     private static int dimX;
     private static int dimY;
+    private static int timeElapsed = 0;
 
     public static void main(String[] args) {
         new Day14().printSolutions();
@@ -24,6 +26,14 @@ public class Day14 extends Puzzle2024 {
             this.posY = posY;
             this.velX = velX;
             this.velY = velY;
+        }
+
+        @Override
+        public String toString() {
+            return "Robot{" +
+                    "posY=" + posY +
+                    ", posX=" + posX +
+                    '}';
         }
 
         private void move(int times) {
@@ -44,54 +54,60 @@ public class Day14 extends Puzzle2024 {
             return 0;
         }
         List<Robot> robots = lines.stream().map(this::lineToRobot).toList();
-        char[][] map = getMap(robots);
-        var timeElapsed = 0;
-        while (!isSymmetric(map)) {
-            timeElapsed++;
-            robots.forEach(robot ->robot.move(1));
-            map = getMap(robots);
+        while (!isSymmetric(robots)) {
+            System.out.println(timeElapsed++);
+            robots.forEach(robot -> robot.move(1));
         }
-        print(map);
+        
         return timeElapsed;
     }
-
-    private boolean isSymmetric(char[][] map) {
-        for (char[] row : map) {
-            if (!rowIsSymmetric(row)) {
-                return false;
+    
+    private boolean isSymmetric(List<Robot> robots) {
+        Map<Integer, List<Robot>> mappedByRow = robots.stream().collect(Collectors.groupingBy(r -> r.posY));
+        for (Integer row : mappedByRow.keySet()) {
+            List<Robot> robotsInRow = mappedByRow.get(row);
+            robotsInRow.sort(Comparator.comparing(r -> r.posX));
+            int maxNextToEachOther = 0;
+            int currentNextToEachOther = 0;
+            for (int i = 1; i < robotsInRow.size(); i++) {
+                if (robotsInRow.get(i - 1).posX + 1 == robotsInRow.get(i).posX) {
+                    currentNextToEachOther++;
+                } else {
+                    if (currentNextToEachOther > maxNextToEachOther) {
+                        maxNextToEachOther = currentNextToEachOther;
+                    }
+                    currentNextToEachOther = 0;
+                }
+            }
+            if (maxNextToEachOther > 10) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean altIsSymmetric(List<Robot> robots) {
+        int symmetricalIndex = 0;
+        while (!indexIsSymmetrical(symmetricalIndex, mappedByRow) && symmetricalIndex < 101) {
+            symmetricalIndex++;
+            System.out.println(symmetricalIndex);
+        }
+        return symmetricalIndex > 101;
+    }
+    
+    private boolean indexIsSymmetrical(int symmetryIndex, Map<Integer, List<Robot>> mappedByRow) {
+        for (Integer row : mappedByRow.keySet()) {
+            List<Robot> robotsInRow = mappedByRow.get(row);
+            robotsInRow.sort(Comparator.comparing(r -> r.posX));
+            for (int i = 0; i < robotsInRow.size() / 2; i++) {
+                int leftDistance = symmetryIndex - robotsInRow.get(i).posX;
+                int rightDistance = robotsInRow.get(robotsInRow.size() - i - 1).posX - symmetryIndex;
+                if (leftDistance < 0 || rightDistance < 0 || leftDistance != rightDistance) {
+                    return false;
+                }
             }
         }
         return true;
-    }
-
-    private boolean rowIsSymmetric(char[] row) {
-        for (int i = 0; i < row.length / 2; i++) {
-            if (row[i] != row[row.length - i - 1]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    private char[][] getMap(List<Robot> robots) {
-        char[][] map = new char[101][103];
-        for (int i = 0; i < 101; i++) {
-            for (int j = 0; j < 103; j++) {
-                map[i][j] = ' ';
-            }
-        }
-        robots.forEach(robot -> map[robot.posX][robot.posY] = '#');
-        return map;
-    }
-
-    private void print(char[][] map) {
-        for (int i = 0; i < 101; i++) {
-            for (int j = 0; j < 103; j++) {
-                System.out.print(map[i][j]);
-            }
-            System.out.println();
-        }
     }
 
     @Override
@@ -108,22 +124,23 @@ public class Day14 extends Puzzle2024 {
 
     private long countQuadrant(List<Robot> robots, int xHalf, int yHalf) {
         return robots.stream()
-                .filter(robot -> correctHalf(xHalf, dimX, robot.posX) &&  correctHalf(yHalf, dimY, robot.posY))
+                .filter(robot -> correctHalf(xHalf, dimX, robot.posX) && correctHalf(yHalf, dimY, robot.posY))
                 .count();
     }
-/*
-    public static void main(String[] args) {
-        var numbers = List.of(0, 1,2,3,4,5,6);
-        numbers.forEach(n -> {
-            System.out.println(n + ": " + correctHalf(0, 7, n));
-        });
-        System.out.println("---------");
-        numbers.forEach(n -> {
-            System.out.println(n + ": " + correctHalf(1, 7, n));
-        });
-    }
-*/
-    private static  boolean correctHalf(int half, int dim, int number) {
+
+    /*
+        public static void main(String[] args) {
+            var numbers = List.of(0, 1,2,3,4,5,6);
+            numbers.forEach(n -> {
+                System.out.println(n + ": " + correctHalf(0, 7, n));
+            });
+            System.out.println("---------");
+            numbers.forEach(n -> {
+                System.out.println(n + ": " + correctHalf(1, 7, n));
+            });
+        }
+    */
+    private static boolean correctHalf(int half, int dim, int number) {
         if (number * 2 == dim - 1) {
             return false;
         }
