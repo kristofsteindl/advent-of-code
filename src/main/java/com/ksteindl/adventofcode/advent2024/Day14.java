@@ -85,15 +85,7 @@ public class Day14 extends Puzzle2024 {
         }
         return false;
     }
-    
-    private boolean altIsSymmetric(List<Robot> robots) {
-        int symmetricalIndex = 0;
-        while (!indexIsSymmetrical(symmetricalIndex, mappedByRow) && symmetricalIndex < 101) {
-            symmetricalIndex++;
-            System.out.println(symmetricalIndex);
-        }
-        return symmetricalIndex > 101;
-    }
+
     
     private boolean indexIsSymmetrical(int symmetryIndex, Map<Integer, List<Robot>> mappedByRow) {
         for (Integer row : mappedByRow.keySet()) {
